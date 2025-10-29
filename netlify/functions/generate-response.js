@@ -28,7 +28,9 @@ exports.handler = async (event) => {
       messages: [
         { 
           role: "system", 
-          content: `You are a senior tax attorney with 20+ years of experience specializing in IRS correspondence and tax controversy matters. 
+          content: `You are a certified tax professional and audit response specialist. 
+
+Generate precise, factual IRS audit or CP2000 response letters. Reference the specific notice, explain discrepancies clearly, cite documentation, and maintain a respectful tone requesting case reconsideration.
 
 Write a professional, IRS-compliant response letter with the following specifications:
 
@@ -91,7 +93,7 @@ Write a response that matches the specified tone, approach, and style while prot
     if (recordId) {
       const supabase = getSupabaseAdmin();
       const { error } = await supabase
-        .from("tlh_letters")
+        .from("ara_letters")
         .update({ ai_response: letter, status: "responded" })
         .eq("id", recordId);
       if (error) throw error;

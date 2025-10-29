@@ -10,7 +10,7 @@ export async function handler(event) {
     if (!recordId || !to) return { statusCode: 400, body: 'Missing params' };
 
     const supabase = getSupabaseAdmin();
-    const { data, error } = await supabase.from('tlh_letters').select('ai_response').eq('id', recordId).single();
+    const { data, error } = await supabase.from('ara_letters').select('ai_response').eq('id', recordId).single();
     if (error || !data) throw error || new Error('No record');
 
     // Generate PDF buffer
@@ -24,13 +24,13 @@ export async function handler(event) {
     const msg = {
       to,
       from: process.env.SUPPORT_EMAIL,
-      subject: 'Your IRS Response Letter from TaxLetterHelp',
+      subject: 'Your IRS Audit Response Letter is Ready',
       text: 'Attached is your AI-generated IRS response letter PDF.',
       html: `
-        <h2>Your IRS Response Letter is Ready</h2>
-        <p>Thank you for using TaxLetterHelp! Your AI-generated response letter is attached as a PDF.</p>
+        <h2>Your IRS Audit Response Letter is Ready</h2>
+        <p>Thank you for using AuditResponseAI! Your AI-generated audit response letter is attached as a PDF.</p>
         <p>Please review the letter carefully before sending it to the IRS. Remember to consult with a tax professional for complex matters.</p>
-        <p>Best regards,<br>The TaxLetterHelp Team</p>
+        <p>Best regards,<br>The AuditResponseAI Team</p>
       `,
       attachments: [{
         content: pdfBuffer.toString('base64'),
