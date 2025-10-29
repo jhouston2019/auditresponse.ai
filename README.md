@@ -1,16 +1,21 @@
-# TaxLetterHelp.com
+# AuditResponseAI
 
-AI-powered tax letter analysis and response generation platform.
+AI-powered IRS audit response letter generator with precision and professionalism.
+
+## About
+
+AuditResponseAI is a specialized AI tool designed to help taxpayers respond to IRS audit notices and CP2000 letters with professional, accurate, and stress-free assistance. Generate precise, factual IRS audit or CP2000 response letters that reference specific notices, explain discrepancies clearly, cite documentation, and maintain a respectful tone requesting case reconsideration.
 
 ## Features
 
 - 🔐 **User Authentication** - Secure login/signup with Supabase
 - 📄 **Document Upload** - Upload IRS letters in PDF/image format
-- 🤖 **AI Analysis** - Get instant explanations of tax letters
-- ✍️ **Response Generation** - AI drafts professional response letters
-- 💳 **Subscription Plans** - Stripe-powered payment system
+- 🤖 **AI Analysis** - Get instant explanations of audit notices
+- ✍️ **Response Generation** - AI drafts professional audit response letters
+- 💳 **One-Time Payment** - Simple $49 one-time fee
 - 📥 **Download Options** - Export responses as PDF or DOCX
 - 🖥️ **Dashboard** - Manage your letters and account
+- 📚 **Resources** - Helpful guides and examples
 
 ## Tech Stack
 
@@ -39,8 +44,11 @@ Required environment variables:
 - `OPENAI_API_KEY` - Your OpenAI API key
 - `STRIPE_SECRET_KEY` - Your Stripe secret key
 - `STRIPE_PUBLIC_KEY` - Your Stripe publishable key
-- `STRIPE_PRICE_*` - Your Stripe price IDs for each plan
-- `SITE_URL` - Your production domain
+- `STRIPE_PRICE_ID` - Your Stripe price ID for audit response
+- `SITE_URL` - Your production domain (https://auditresponse.ai)
+- `APP_NAME` - AuditResponseAI
+- `TAGLINE` - Handle IRS audits and CP2000 notices with AI precision
+- `PRIMARY_COLOR` - #2563eb
 
 ### 2. Supabase Setup
 
@@ -54,8 +62,8 @@ Required environment variables:
 ### 3. Stripe Setup
 
 1. Create a Stripe account
-2. Create products and prices for your subscription plans
-3. Add the price IDs to your environment variables
+2. Create a product: "Audit Response Letter" for $49
+3. Add the price ID to your environment variables
 
 ### 4. OpenAI Setup
 
@@ -83,11 +91,12 @@ Deploy to Netlify:
 1. Connect your GitHub repository to Netlify
 2. Set environment variables in Netlify dashboard
 3. Deploy automatically on push to main branch
+4. Configure custom domain: auditresponse.ai
 
 ## File Structure
 
 ```
-taxletterhelp/
+auditresponseai/
 ├── src/
 │   ├── components/
 │   │   ├── Auth.js              # Authentication functions
@@ -103,12 +112,17 @@ taxletterhelp/
 │   └── migrations/
 │       ├── 20251001_create_users_table.sql
 │       └── 20251001_create_documents_table.sql
+├── examples/
+│   ├── cp2000-sample.pdf        # Sample CP2000 notice
+│   └── audit-reply-sample.pdf   # Sample audit response
 ├── index.html                   # Homepage
+├── examples.html                # Example letters page
+├── resources.html               # Helpful resources
 ├── login.html                   # Login page
 ├── signup.html                  # Signup page
 ├── upload.html                  # Document upload
 ├── dashboard.html               # User dashboard
-├── pricing.html                 # Subscription plans
+├── pricing.html                 # Pricing page
 ├── success.html                 # Payment success
 ├── cancel.html                  # Payment cancelled
 ├── privacy.html                 # Privacy policy
@@ -121,8 +135,8 @@ taxletterhelp/
 
 ### Netlify Functions
 
-- `/.netlify/functions/analyze-letter` - Analyze uploaded tax letters
-- `/.netlify/functions/generate-response` - Generate response letters
+- `/.netlify/functions/analyze-letter` - Analyze uploaded audit letters
+- `/.netlify/functions/generate-response` - Generate audit response letters
 - `/.netlify/functions/create-checkout-session` - Create Stripe checkout
 - `/.netlify/functions/generate-pdf` - Generate PDF documents
 
@@ -142,7 +156,7 @@ taxletterhelp/
 
 ## Support
 
-For support, email info@axis-strategic-media.com
+For support, email support@auditresponse.ai
 
 ## License
 
