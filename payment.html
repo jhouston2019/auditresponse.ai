@@ -97,17 +97,24 @@
                     body: JSON.stringify({})
                 });
                 
+                // Check if response is ok before parsing
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ error: `HTTP ${response.status}: ${response.statusText}` }));
+                    throw new Error(errorData.error || errorData.details || `Server error: ${response.status}`);
+                }
+                
                 const data = await response.json();
                 
                 if (data.url) {
                     // Redirect to Stripe Checkout
                     window.location.href = data.url;
                 } else {
-                    throw new Error(data.error || 'Failed to create checkout session');
+                    throw new Error(data.error || data.details || 'Failed to create checkout session');
                 }
             } catch (error) {
                 console.error('Payment error:', error);
-                alert('Payment setup failed. Please try again or contact support.');
+                const errorMessage = error.message || 'Payment setup failed. Please try again or contact support.';
+                alert(`Payment setup failed: ${errorMessage}`);
                 
                 // Reset button state
                 button.disabled = false;

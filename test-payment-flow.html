@@ -136,15 +136,21 @@
                     body: JSON.stringify({})
                 });
                 
+                // Check if response is ok before parsing
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ error: `HTTP ${response.status}: ${response.statusText}` }));
+                    throw new Error(errorData.error || errorData.details || `Server error: ${response.status}`);
+                }
+                
                 const data = await response.json();
                 
                 if (data.url) {
                     resultsDiv.innerHTML = `<div class="status success">✅ Stripe integration working! Checkout URL: ${data.url}</div>`;
                 } else {
-                    resultsDiv.innerHTML = `<div class="status error">❌ Stripe integration failed: ${data.error || 'Unknown error'}</div>`;
+                    resultsDiv.innerHTML = `<div class="status error">❌ Stripe integration failed: ${data.error || data.details || 'Unknown error'}</div>`;
                 }
             } catch (error) {
-                resultsDiv.innerHTML = `<div class="status error">❌ Network error: ${error.message}</div>`;
+                resultsDiv.innerHTML = `<div class="status error">❌ Error: ${error.message}</div>`;
             }
         }
 

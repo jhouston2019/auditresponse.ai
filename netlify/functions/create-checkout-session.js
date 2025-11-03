@@ -10,7 +10,7 @@ export async function handler(event) {
     console.log('STRIPE_PRICE_RESPONSE:', process.env.STRIPE_PRICE_RESPONSE);
     
     const { recordId = null } = JSON.parse(event.body || "{}"); // send from client if available
-    const priceId = process.env.STRIPE_PRICE_RESPONSE || "price_49USD_single";
+    const priceId = process.env.STRIPE_PRICE_RESPONSE || process.env.STRIPE_PRICE_ID || "price_49USD_single";
     
     // Validate required environment variables
     if (!process.env.SITE_URL) {
@@ -19,18 +19,33 @@ export async function handler(event) {
     if (!process.env.STRIPE_SECRET_KEY) {
       throw new Error('STRIPE_SECRET_KEY environment variable is not set');
     }
+    if (!priceId || priceId === "price_49USD_single") {
+      console.warn('Warning: Using default price ID. Consider setting STRIPE_PRICE_RESPONSE or STRIPE_PRICE_ID environment variable.');
+    }
 
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [{ 
-        price: priceId, 
-        quantity: 1 
-      }],
-      mode: 'payment',
-      success_url: `${process.env.SITE_URL}/thank-you.html`,
-      cancel_url: `${process.env.SITE_URL}/pricing.html`,
-      metadata: recordId ? { recordId } : { plan: 'single' }
-    });
+    let session;
+    try {
+      session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: [{ 
+          price: priceId, 
+          quantity: 1 
+        }],
+        mode: 'payment',
+        success_url: `${process.env.SITE_URL}/thank-you.html`,
+        cancel_url: `${process.env.SITE_URL}/pricing.html`,
+        metadata: recordId ? { recordId } : { plan: 'single' }
+      });
+    } catch (stripeError) {
+      // Provide more helpful error messages
+      if (stripeError.type === 'StripeInvalidRequestError') {
+        if (stripeError.message.includes('No such price')) {
+          throw new Error(`Invalid Stripe price ID: ${priceId}. Please check your STRIPE_PRICE_RESPONSE or STRIPE_PRICE_ID environment variable.`);
+        }
+        throw new Error(`Stripe error: ${stripeError.message}`);
+      }
+      throw stripeError;
+    }
 
     return {
       statusCode: 200,

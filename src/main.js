@@ -72,14 +72,18 @@ window.startCheckout = async function(plan) {
       body: JSON.stringify({ plan: plan })
     });
     
+    // Check if response is ok before parsing
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: `HTTP ${response.status}: ${response.statusText}` }));
+      throw new Error(errorData.error || errorData.details || `Server error: ${response.status}`);
+    }
+    
     const data = await response.json();
     
     if (data.url) {
       window.location.href = data.url;
     } else {
-      alert('Failed to create checkout session: ' + (data.error || 'Unknown error'));
-      button.textContent = originalText;
-      button.disabled = false;
+      throw new Error(data.error || data.details || 'Failed to create checkout session');
     }
   } catch (error) {
     alert('Failed to start checkout: ' + error.message);
