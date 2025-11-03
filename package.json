@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && npm run copy-html",
+    "prod:check": "node scripts/prod-check.js",
     "copy-html": "copyfiles *.html dist/ && copyfiles styles.css dist/",
     "preview": "vite preview"
   },
@@ -26,5 +27,8 @@
   "devDependencies": {
     "copyfiles": "^2.4.1",
     "vite": "^5.0.0"
+  },
+  "optionalDependencies": {
+    "netlify-cli": "^23.5.1"
   }
 }
