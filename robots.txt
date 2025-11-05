@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://auditresponse.ai/sitemap.xml
+Sitemap: https://irsauditresponseai.netlify.app/sitemap.xml
